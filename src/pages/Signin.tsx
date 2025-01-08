@@ -12,36 +12,41 @@ const Signin = () => {
 
   // Handle form submission
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      if (formData.password.length < 4) {
-        setError("Password must be greater than 4 characters.");
-        return;
-        e.preventDefault();
-        setError("");
-        const Response = await fetch("/route/signin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...formData,
-          }),
-        });
-        const data = await Response.json();
-      }
-    } catch (error) {
-      setError("faild to login");
-    }
-  };
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   try {
+  //     if (formData.password.length < 4) {
+  //       setError("Password must be greater than 4 characters.");
+  //       return;
+  //     }
+  //     e.preventDefault();
+  //     setError("");
+  //     // const Response = await fetch("/route/signin", {
+  //     //   method: "POST",
+  //     //   headers: {
+  //     //     "Content-Type": "application/json",
+  //     //   },
+  //     //   body: JSON.stringify({
+  //     //     ...formData,
+  //     //   }),
+  //     // });
+  //     const data = await Response.json();
+  //   } catch (error) {
+  //     setError("faild to login");
+  //   }
+  // };
   // const phoneNumberRegex = /^\+251\d{9}$/;
   // if (!phoneNumberRegex.test(formData.phoneNumber)) {
   //   setError("Phone number must be in the format +251XXXXXXXXX.");
   //   return;
   // }
-
-  console.log(formData);
-  navigate("/Dashboard");
+  const handleSubmit = (e: React.FormEvent) => {
+    if (formData.password.length < 4) {
+      setError("Password must be greater than 4 characters.");
+      return;
+    }
+    console.log(formData);
+    navigate("/Dashboard");
+  };
 
   return (
     <>
