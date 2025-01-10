@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { ArrowLeftIcon, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import ArrowLeft from "../util/arrowLeft";
+import axios from "axios";
+import toast from "react-hot-toast";
+const apiUrl = "http://localhost:8000";
+const token = localStorage.getItem("access_token");
+
 const Signin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    Email: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState<string>("");
@@ -39,13 +44,38 @@ const Signin = () => {
   //   setError("Phone number must be in the format +251XXXXXXXXX.");
   //   return;
   // }
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (formData.password.length < 4) {
       setError("Password must be greater than 4 characters.");
       return;
     }
-    console.log(formData);
-    navigate("/Dashboard");
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/token/`,
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      const { access, refresh } = response.data;
+
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+      console.log(access, refresh);
+      console.log("Sign-in successful!");
+      toast.success("Sign-in successful!");
+      navigate("/Dashboard");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid username or password");
+    }
   };
 
   return (
@@ -65,9 +95,9 @@ const Signin = () => {
                 type="email"
                 className="w-full bg-gray-800 rounded-lg px-4 py-2 text-white"
                 placeholder="admin@gmail.com"
-                value={formData.Email}
+                value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, Email: e.target.value })
+                  setFormData({ ...formData, email: e.target.value })
                 }
               />
             </div>
@@ -84,6 +114,10 @@ const Signin = () => {
                   setFormData({ ...formData, password: e.target.value })
                 }
               />
+              <Link to="/password-reset" className="text-sm text-red-500 pt-3">
+                {" "}
+                <p>Forgot Password</p>{" "}
+              </Link>{" "}
             </div>
 
             {error && <div className="text-red-500 text-sm">{error}</div>}

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLoaderData, useLocation } from "react-router-dom";
 import Select from "react-select";
+import axios from "axios";
 import toast from "react-hot-toast";
+import { duration } from "@mui/material";
+const apiUrl = "http://localhost:8000";
 interface AddRouteProps {
   Routename?: string;
 }
@@ -48,23 +51,40 @@ const AddRoute: React.FC<AddRouteProps> = ({ Routename }) => {
   const handleBusNumber = (e) => {
     setbus(e.target.value);
   };
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    console.error("Token not found");
+    return;
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(bus);
+    const path1 = selectedOption.value.split("-");
+
     ///   add route and bus number.
     try {
-      const res = await fetch("/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await axios.post(
+        `${apiUrl}/api/routes/`,
+        {
+          start_location: path1[0],
+          end_location: path1[1],
+          distance: 10,
+          duration: 3,
+          bus_stops: path1[1],
+          bus_number: bus,
         },
-        body: JSON.stringify({ selectedOption, bus }),
-      });
-      const data = await res.json();
-      if (data.respones.ok) {
-        setError("erorr");
-        toast.success("Application accepted");
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res) {
+        alert("add successfull");
       }
+      console.log(res);
+      toast.success("Application accepted");
     } catch (error) {
       setError("error");
     }
@@ -93,9 +113,7 @@ const AddRoute: React.FC<AddRouteProps> = ({ Routename }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2">
-              Number of Bus
-            </label>
+            <label className="block text-sm font-bold mb-2">Bus Number</label>
             <input
               type="number"
               placeholder="Enter destination"

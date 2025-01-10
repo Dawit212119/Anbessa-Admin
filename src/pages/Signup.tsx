@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import ArrowLeft from "../util/arrowLeft.tsx";
+import axios from "axios";
+const apiUrl = "http://localhost:8000";
 
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    Email: "",
+    email: "",
     password: "",
     Fullname: "",
-    OTP: "",
     confirmPassword: "",
   });
   const [error, setError] = useState("");
@@ -21,24 +22,34 @@ const Signup = () => {
     setError("");
 
     if (formData.password.length < 4)
-      setError("Password must be greater than 4 characters.");
-    return;
-    if (formData.password != formData.confirmPassword)
-      return setError("The password must match");
+      return setError("Password must be greater than 4 characters.");
+    try {
+      const response = await axios.post(
+        `${apiUrl}/signup/`,
+        {
+          username: formData.Fullname,
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const Response = await fetch("/route/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...formData,
-      }),
-    });
-    const data = await Response.json();
+      console.log(response);
+      const { access, refresh } = response.data;
 
-    console.log(formData);
-    navigate("/");
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+      console.log(access, refresh);
+      console.log("Sign-in successful!");
+      navigate("/signin");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid username or password");
+    }
   };
 
   return (
@@ -73,9 +84,9 @@ const Signup = () => {
                 type="email"
                 className="w-full bg-gray-800 rounded-lg px-4 py-2 text-white"
                 placeholder="admin@gmail.com"
-                value={formData.Email}
+                value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, Email: e.target.value })
+                  setFormData({ ...formData, email: e.target.value })
                 }
               />
             </div>
