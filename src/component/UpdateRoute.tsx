@@ -1,189 +1,178 @@
-// import { DeleteIcon } from "lucide-react";
-// import React, { useState } from "react";
-// import { MdPending, MdRampRight } from "react-icons/md";
-// import { FaCheck, FaEye, FaTrashAlt } from "react-icons/fa";
+import * as React from "react";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
+import Actionbtn from "./Admincomponent/Actionbtn";
+import { MdAccessTimeFilled, MdDone, MdRemoveRedEye } from "react-icons/md";
+import { FaTimesCircle } from "react-icons/fa";
+import Status from "./Admincomponent/Status";
 
-// const ManageApplications = () => {
-//   const [applications, setApplications] = useState([
-//     {
-//       id: "672f6668816c64d6698467f5",
-//       Route: "Addis Alemayehu",
-//       date: "2 months ago",
-//       status: "Accepted",
-//     },
-//     {
-//       id: "672f6c9f6ce5e0e7f894d713",
-//       Route: "Addis",
-//       date: "2 months ago",
-//       status: "Accepted",
-//     },
-//     {
-//       id: "674d954f6b31a89672ef653b",
-//       Route: "Dawit Workiye",
-//       date: "a month ago",
-//       status: "Accepted",
-//     },
-//     {
-//       id: "676d13d5dde0fef9baddaa7f",
-//       Route: "Addis Alemayehu",
-//       date: "7 days ago",
-//       status: "Pending",
-//     },
-//     {
-//       id: "676d1572dde0fef9baddaa80",
-//       Route: "addis alemayehu",
-//       date: "7 days ago",
-//       status: "Accepted",
-//     },
-//   ]);
-
-//   const handleStatusChange = (id, newStatus) => {
-//     setApplications((prev) =>
-//       prev.map((app) => (app.id === id ? { ...app, status: newStatus } : app))
-//     );
-//   };
-
-//   return (
-//     <div>
-//       <table
-//         style={{ width: "100%", textAlign: "left" }}
-//         className="text-black"
-//       >
-//         <thead className="bg-white">
-//           <tr>
-//             <th style={{ border: "2px solid #ddd", padding: "8px" }}>ID</th>
-//             <th style={{ border: "2px solid #ddd", padding: "8px" }}>Route</th>
-//             <th style={{ border: "2px solid #ddd", padding: "8px" }}>Date</th>
-//             <th style={{ border: "2px solid #ddd", padding: "8px" }}>
-//               Route Status
-//             </th>
-//             <th style={{ border: "2px solid #ddd", padding: "8px" }}>
-//               Actions
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody className="bg-slate-200">
-//           {applications.map((app) => (
-//             <tr key={app.id}>
-//               <td style={{ border: "2px solid #ddd", padding: "8px" }}>
-//                 {app.id}
-//               </td>
-//               <td style={{ border: "2px solid #ddd", padding: "8px" }}>
-//                 {app.Route}
-//               </td>
-
-//               <td style={{ border: "2px solid #ddd", padding: "8px" }}>
-//                 {app.date}
-//               </td>
-//               <td
-//                 className="text-center"
-//                 style={{
-//                   color: app.status === "Accepted" ? "green" : "orange",
-//                 }}
-//               >
-//                 {app.status}
-//               </td>
-//               <td className="flex justify-evenly">
-//                 <button onClick={() => handleStatusChange(app.id, "Accepted")}>
-//                   <FaCheck />
-//                 </button>
-//                 <button onClick={() => handleStatusChange(app.id, "Pending")}>
-//                   <MdPending />
-//                 </button>
-//                 <button onClick={() => alert(`Viewing ${app.Route}`)}>
-//                   <FaEye />
-//                 </button>
-//                 <button
-//                   onClick={() =>
-//                     setApplications((prev) =>
-//                       prev.filter((a) => a.id !== app.id)
-//                     )
-//                   }
-//                 >
-//                   <DeleteIcon />
-//                 </button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-//
-// import * as React from "react";
-// import { DataGrid, GridColDef } from "@mui/x-data-grid";
-// import Paper from "@mui/material/Paper";
-
-// const paginationModel = { page: 0, pageSize: 5 };
-
-// export default function DataTable() {
-//   const [fetchrows, setRows] = React.useState([]);
-
-///////     fetching the request data
-
-// React.useEffect(() => {
-//   const fetchingData = async () => {
-//     const Response = await fetch("/s");
-//     const data = await Response.json();
-//     if (data) {
-//       setRows(data);
-//     }
-//   };
-//   fetchingData();
-// }, []);
-
-//   const columns: GridColDef[] = [
-//     { field: "id", headerName: "ID", width: 200 },
-//     { field: "Route", headerName: "Route", width: 200 },
-//     {
-//       field: "Time",
-//       headerName: "Time",
-//       type: "date",
-//       width: 200,
-//     },
-//     {
-//       field: "Status",
-//       headerName: "Status",
-//       description: "This column has a value getter and is not sortable.",
-//       sortable: false,
-//       width: 200,
-//     },
-//     {
-//       field: "Action",
-//       headerName: "Action",
-//       width: 200,
-//     },
-//   ];
-
-//   const rows = [
-//     { id: 1, Time: new Date(), Route: "bethel-alembank" },
-//     { id: 2, Time: new Date(), Route: "pissa-adisugebya" },
-//     { id: 3, Time: new Date(), Route: "megenagna-abado" },
-//     { id: 4, Time: new Date(), Route: "ayat-cmc" },
-//     { id: 5, Time: new Date(), Route: "bole-4killo" },
-//     { id: 6, Time: new Date(), Route: "4killo-mexico" },
-//     { id: 7, Time: new Date(), Route: "mexico-sheromeda" },
-//     { id: 8, Time: new Date(), Route: "ferensay-6killo" },
-//     { id: 9, Time: new Date(), Route: "kalite-koyefetch" },
-//   ];
-
-//   return (
-//     <Paper sx={{ height: 400, width: "100%" }} className="bg-slate-400">
-//       <DataGrid
-//         rows={rows}
-//         columns={columns}
-//         initialState={{ pagination: { paginationModel } }}
-//         pageSizeOptions={[5, 10]}
-//         checkboxSelection
-//         sx={{ border: 0 }}
-//       />
-//     </Paper>
-//   );
-// }
-import React from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { duration } from "@mui/material";
+const apiUrl = "http://localhost:8000";
+interface Route {
+  id: number; // or string, depending on your backend response
+  Route: string;
+  Time: string;
+  busNumber: string;
+}
+const paginationModel = { page: 0, pageSize: 5 };
 
 export default function UpdateRoute() {
-  return <div>UpdateRoute</div>;
+  const [fetchrows, setRows] = React.useState<Route[]>([]);
+
+  ///////     fetching the request data
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    console.error("Token not found");
+    return;
+  }
+  React.useEffect(() => {
+    const fetchingData = async () => {
+      const res = await axios.get(`${apiUrl}/api/routes`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data);
+      if (res.data) {
+        const processedRows = res.data.map((route, index) => ({
+          id: route.id, // Unique ID for each row
+          Route: `${route.start_location} - ${route.end_location}`,
+          Time: `${route.duration} hours`,
+          busNumber: route.bus_number,
+        }));
+        setRows(processedRows);
+        console.log(fetchingData);
+      }
+    };
+    fetchingData();
+  }, []);
+
+  const handleDenied = async (id: number) => {
+    console.log(id);
+    try {
+      const res = await axios.delete(`${apiUrl}/api/routes/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status === 200 || res.status === 204) {
+        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+      }
+    } catch (error) {}
+
+    console.log(id);
+  };
+
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 200 },
+    { field: "Route", headerName: "Route", width: 200 },
+    {
+      field: "Time",
+      headerName: "Time",
+      type: "string",
+      width: 200,
+    },
+    {
+      field: "busNumber",
+      headerName: "Bus_Number",
+      type: "number",
+      width: 200,
+    },
+    // {
+    //   field: "Status",
+    //   headerName: "Status",
+    //   description: "This column has a value getter and is not sortable.",
+    //   sortable: false,
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div>
+    //         {params.row.status === "pending" ? (
+    //           <Status
+    //             text="Pending"
+    //             icon={MdAccessTimeFilled}
+    //             bg="bg-slate-200"
+    //             color="text-slate-700"
+    //           />
+    //         ) : params.row.status === "rejected" ? (
+    //           <Status
+    //             text="Rejected"
+    //             icon={FaTimesCircle}
+    //             bg="bg-red-200"
+    //             color="text-red-700"
+    //           />
+    //         ) : params.row.status === "accepted" ? (
+    //           <Status
+    //             text="Accepted"
+    //             icon={MdDone}
+    //             bg="bg-green-200"
+    //             color="text-green-700"
+    //           />
+    //         ) : (
+    //           <></>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
+    {
+      field: "Action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="flex text-center justify-between gap-4 w-full my-2">
+            <Actionbtn
+              icon={FaTimesCircle}
+              onClick={() => {
+                handleDenied(params.row.id);
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    //         <Actionbtn
+    //           icon={MdAccessTimeFilled}
+    //           onClick={() => {
+    //             handlePending(params.row.id);
+    //           }}
+    //         />
+    //         <Actionbtn
+    //           icon={MdDone}
+    //           onClick={() => {
+    //             handleReviewed(params.row.id);
+    //           }}
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
+  ];
+
+  return (
+    <>
+      <div className="font-bold text-xl mb-7 text-center">
+        Manage <span className="text-orange-500 ">Route</span>{" "}
+      </div>
+      <Paper
+        sx={{ height: 400, width: "100%" }}
+        className="bg-slate-400 text-center"
+      >
+        <DataGrid
+          rows={fetchrows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+        />
+      </Paper>
+    </>
+  );
 }
